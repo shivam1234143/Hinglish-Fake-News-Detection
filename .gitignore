@@ -1,0 +1,20 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.ipynb_checkpoints/
+
+# Training dataset
+data/
+
+# Old MuRIL test model
+model/muril_cpu_test/
+
+# Training checkpoints
+model/muril_fake_news/checkpoint-*/
+
+# Large MuRIL model file
+model/muril_fake_news/model.safetensors

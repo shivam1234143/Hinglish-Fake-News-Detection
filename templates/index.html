@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="SatyaCheck - AI-powered Hindi, English and Hinglish news analysis."
+    >
+
+    <title>SatyaCheck | AI News Verification</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="brand">
+
+            <div class="brand-icon">
+                SC
+            </div>
+
+            <div class="brand-text">
+                <strong>SatyaCheck</strong>
+                <span>AI News Verification</span>
+            </div>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="#analyzer">Analyzer</a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#technology">
+                Technology
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+        </nav>
+
+
+        <div class="nav-actions">
+
+            <span class="system-status">
+                <span class="status-dot"></span>
+                AI ONLINE
+            </span>
+
+            <button
+                class="theme-button"
+                id="themeToggle"
+                type="button"
+                aria-label="Toggle theme"
+            >
+                ☾
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span>✦</span>
+                AI-POWERED NEWS ANALYSIS
+            </div>
+
+            <h1>
+                Verify before
+                <span>you trust.</span>
+            </h1>
+
+            <p>
+                Analyze Hindi, English and Hinglish news
+                claims using transformer-based language
+                analysis and risk detection.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#analyzer"
+                    class="primary-button"
+                >
+                    Analyze a Claim
+                    <span>→</span>
+                </a>
+
+                <a
+                    href="#how-it-works"
+                    class="secondary-button"
+                >
+                    See How It Works
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <div class="hero-card-top">
+
+                <span>
+                    SATYACHECK AI
+                </span>
+
+                <span class="live-pill">
+                    ● LIVE
+                </span>
+
+            </div>
+
+            <div class="scan-line"></div>
+
+            <div class="hero-analysis">
+
+                <div class="analysis-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Claim Analysis
+                    </strong>
+
+                    <p>
+                        Language patterns detected
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="hero-metrics">
+
+                <div>
+                    <strong>MuRIL</strong>
+                    <span>Transformer</span>
+                </div>
+
+                <div>
+                    <strong>64K+</strong>
+                    <span>News Records</span>
+                </div>
+
+                <div>
+                    <strong>3</strong>
+                    <span>Risk Levels</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STATS
+====================================================== -->
+
+<section class="stats-section">
+
+    <div class="stats-container">
+
+        <div class="stat-card">
+
+            <strong>64K+</strong>
+
+            <span>
+                News Records
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <strong>MuRIL</strong>
+
+            <span>
+                Transformer Model
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <strong>3</strong>
+
+            <span>
+                Result Categories
+            </span>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <strong>3</strong>
+
+            <span>
+                Language Styles
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ANALYZER
+====================================================== -->
+
+<section
+    class="section analyzer-section"
+    id="analyzer"
+>
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            NEWS ANALYZER
+        </span>
+
+        <h2>
+            Check a news claim
+        </h2>
+
+        <p>
+            Paste a headline and article, message or
+            social-media claim below.
+        </p>
+
+    </div>
+
+
+    <div class="analyzer-layout">
+
+        <!-- INPUT -->
+
+        <div class="analyzer-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-label">
+                        INPUT
+                    </span>
+
+                    <h3>
+                        Enter news details
+                    </h3>
+
+                </div>
+
+                <span class="secure-badge">
+                    AI Analysis
+                </span>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="/"
+                id="analyzerForm"
+            >
+
+                <div class="form-group">
+
+                    <label for="title">
+                        Headline
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ title }}"
+                        placeholder="Enter the news headline..."
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="article">
+                        Article / Message
+                    </label>
+
+                    <textarea
+                        id="article"
+                        name="text"
+                        rows="10"
+                        placeholder="Paste the news article, WhatsApp message or social-media claim here..."
+                        required
+                    >{{ article }}</textarea>
+
+                </div>
+
+
+                <div class="input-footer">
+
+                    <span id="characterCount">
+                        0 characters
+                    </span>
+
+                    <span>
+                        Minimum 30 characters
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="analyze-button"
+                    id="analyzeButton"
+                >
+
+                    <span>
+                        Analyze Claim
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- DEMO BUTTONS -->
+
+            <div class="demo-section">
+
+                <span>
+                    Try an example:
+                </span>
+
+                <div class="demo-buttons">
+
+                    <button
+                        type="button"
+                        onclick="loadFakeExample()"
+                    >
+                        Fake News
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="loadRealExample()"
+                    >
+                        Real News
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="loadHinglishExample()"
+                    >
+                        Hinglish
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="result-card">
+
+            {% if result %}
+
+            <div class="result-header">
+
+                <span class="card-label">
+                    ANALYSIS RESULT
+                </span>
+
+                {% if result.label == "REAL NEWS" %}
+
+                <span class="result-status real">
+                    ● REAL
+                </span>
+
+                {% elif result.label == "LIKELY FAKE NEWS" %}
+
+                <span class="result-status fake">
+                    ● HIGH RISK
+                </span>
+
+                {% else %}
+
+                <span class="result-status uncertain">
+                    ● REVIEW
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="result-main">
+
+                <div class="result-icon
+                    {% if result.label == 'REAL NEWS' %}
+                        real
+                    {% elif result.label == 'LIKELY FAKE NEWS' %}
+                        fake
+                    {% else %}
+                        uncertain
+                    {% endif %}
+                ">
+
+                    {% if result.label == "REAL NEWS" %}
+                        ✓
+                    {% elif result.label == "LIKELY FAKE NEWS" %}
+                        !
+                    {% else %}
+                        ?
+                    {% endif %}
+
+                </div>
+
+
+                <h2>
+                    {{ result.label }}
+                </h2>
+
+                <p>
+                    AI classification confidence
+                </p>
+
+            </div>
+
+
+            <div class="confidence-box">
+
+                <div class="confidence-top">
+
+                    <span>
+                        Confidence
+                    </span>
+
+                    <strong>
+                        {{ result.confidence }}%
+                    </strong>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ result.confidence }}%"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            {% if result.risk_signals %}
+
+            <div class="signals-section">
+
+                <div class="signals-title">
+                    Detected signals
+                </div>
+
+                {% for signal in result.risk_signals %}
+
+                <div class="signal-item">
+                    <span>⚠</span>
+                    {{ signal }}
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="no-signals">
+                ✓ No significant risk signals detected.
+            </div>
+
+            {% endif %}
+
+
+            <div class="model-details">
+
+                <div>
+                    <span>Model</span>
+                    <strong>
+                        MuRIL
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Threshold</span>
+                    <strong>
+                        {{ result.threshold }}%
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Risk Score</span>
+                    <strong>
+                        {{ result.risk_score }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="result-warning">
+                {{ result.warning }}
+            </div>
+
+
+            {% else %}
+
+            <div class="empty-result">
+
+                <div class="empty-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    Your result will appear here
+                </h3>
+
+                <p>
+                    Enter a news headline and article
+                    to start the AI analysis.
+                </p>
+
+                <div class="empty-features">
+
+                    <span>✓ AI classification</span>
+
+                    <span>✓ Confidence score</span>
+
+                    <span>✓ Risk signals</span>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HOW IT WORKS
+====================================================== -->
+
+<section
+    class="section how-section"
+    id="how-it-works"
+>
+
+    <div class="section-heading center">
+
+        <span class="section-label">
+            HOW IT WORKS
+        </span>
+
+        <h2>
+            From claim to assessment
+        </h2>
+
+        <p>
+            SatyaCheck combines language understanding
+            with risk-pattern analysis.
+        </p>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step-card">
+
+            <div class="step-number">
+                01
+            </div>
+
+            <h3>
+                Enter the claim
+            </h3>
+
+            <p>
+                Provide a headline and the news,
+                article or message you want to analyze.
+            </p>
+
+        </div>
+
+
+        <div class="step-card">
+
+            <div class="step-number">
+                02
+            </div>
+
+            <h3>
+                Language analysis
+            </h3>
+
+            <p>
+                The text is processed and passed
+                through the fine-tuned MuRIL transformer.
+            </p>
+
+        </div>
+
+
+        <div class="step-card">
+
+            <div class="step-number">
+                03
+            </div>
+
+            <h3>
+                Risk detection
+            </h3>
+
+            <p>
+                Additional signals such as urgency,
+                suspicious links and claim patterns are checked.
+            </p>
+
+        </div>
+
+
+        <div class="step-card">
+
+            <div class="step-number">
+                04
+            </div>
+
+            <h3>
+                Final assessment
+            </h3>
+
+            <p>
+                The system returns a classification,
+                confidence score and detected signals.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TECHNOLOGY
+====================================================== -->
+
+<section
+    class="section technology-section"
+    id="technology"
+>
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            TECHNOLOGY
+        </span>
+
+        <h2>
+            Built with modern AI technology
+        </h2>
+
+        <p>
+            A practical stack designed for NLP,
+            model inference and web deployment.
+        </p>
+
+    </div>
+
+
+    <div class="technology-grid">
+
+        <div class="tech-card">
+
+            <div class="tech-icon">
+                Py
+            </div>
+
+            <h3>
+                Python
+            </h3>
+
+            <p>
+                Core language for data processing
+                and machine learning.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <div class="tech-icon">
+                ML
+            </div>
+
+            <h3>
+                MuRIL
+            </h3>
+
+            <p>
+                Multilingual transformer fine-tuned
+                for news classification.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <div class="tech-icon">
+                TF
+            </div>
+
+            <h3>
+                Transformers
+            </h3>
+
+            <p>
+                Tokenization and neural model
+                inference.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <div class="tech-icon">
+                Fl
+            </div>
+
+            <h3>
+                Flask
+            </h3>
+
+            <p>
+                Lightweight backend API and
+                web application framework.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+====================================================== -->
+
+<section
+    class="section about-section"
+    id="about"
+>
+
+    <div class="about-grid">
+
+        <div>
+
+            <span class="section-label">
+                ABOUT SATYACHECK
+            </span>
+
+            <h2>
+                Built to encourage
+                <span>responsible sharing.</span>
+            </h2>
+
+        </div>
+
+
+        <div class="about-text">
+
+            <p>
+                SatyaCheck is an AI-powered news analysis
+                project focused on Hindi, English and
+                Hinglish content.
+            </p>
+
+            <p>
+                It uses a fine-tuned MuRIL transformer
+                together with additional risk-pattern
+                analysis to identify potentially misleading
+                content.
+            </p>
+
+            <p class="about-note">
+                SatyaCheck is an educational and research
+                project. AI predictions should not replace
+                independent verification of important claims.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+====================================================== -->
+
+<section
+    class="section contact-section"
+    id="contact"
+>
+
+    <div class="contact-card">
+
+        <div>
+
+            <span class="section-label">
+                CONTACT
+            </span>
+
+            <h2>
+                Have feedback?
+            </h2>
+
+            <p>
+                Found an incorrect prediction or have
+                suggestions for improving SatyaCheck?
+            </p>
+
+        </div>
+
+
+        <a
+            href="mailto:your-email@example.com"
+            class="primary-button"
+        >
+            Send Feedback →
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-brand">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    SC
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        SatyaCheck
+                    </strong>
+
+                    <span>
+                        AI News Verification
+                    </span>
+
+                </div>
+
+            </div>
+
+            <p>
+                Verify before you trust.
+                AI-powered news analysis for
+                Hindi, English and Hinglish content.
+            </p>
+
+            <div class="footer-status">
+                <span class="status-dot"></span>
+                AI SYSTEM ONLINE
+            </div>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Product
+            </h4>
+
+            <a href="#analyzer">
+                Analyzer
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#technology">
+                Technology
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Resources
+            </h4>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#contact">
+                Feedback
+            </a>
+
+            <a href="#analyzer">
+                Try Demo
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                Contact
+            </h4>
+
+            <a href="mailto:your-email@example.com">
+                Email Support
+            </a>
+
+            <span>
+                Ghaziabad, Uttar Pradesh
+            </span>
+
+            <span>
+                India
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 SatyaCheck. All rights reserved.
+        </span>
+
+        <span>
+            Built for educational & research purposes.
+        </span>
+
+        <span>
+            Privacy · Terms · Disclaimer
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+    const articleBox =
+        document.getElementById("article");
+
+    const characterCount =
+        document.getElementById("characterCount");
+
+
+    function updateCharacterCount() {
+
+        if (!articleBox || !characterCount) {
+            return;
+        }
+
+        const count =
+            articleBox.value.length;
+
+        characterCount.textContent =
+            count + " characters";
+    }
+
+
+    if (articleBox) {
+
+        articleBox.addEventListener(
+            "input",
+            updateCharacterCount
+        );
+
+        updateCharacterCount();
+    }
+
+
+    function loadExample(title, article) {
+
+        document.getElementById("title").value =
+            title;
+
+        document.getElementById("article").value =
+            article;
+
+        updateCharacterCount();
+
+        document
+            .getElementById("analyzer")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+    }
+
+
+    function loadFakeExample() {
+
+        loadExample(
+            "Modi Govt sabhi Indian students ko 3 months ka FREE internet",
+            "Modi Govt sabhi Indian students ko 3 months ka FREE internet recharge de rahi hai. Is link par click karke apna free recharge claim karein: http://fakelink.com. Jaldi karein, offer limited time ke liye hai!"
+        );
+    }
+
+
+    function loadRealExample() {
+
+        loadExample(
+            "India launches new digital education initiative",
+            "The government has announced a new initiative to expand digital education resources and improve access to online learning services across the country."
+        );
+    }
+
+
+    function loadHinglishExample() {
+
+        loadExample(
+            "Government ne students ke liye new scholarship announce ki",
+            "Students official government website par jaakar scholarship ki eligibility aur application process check kar sakte hain. Application submit karne se pehle official information verify karein."
+        );
+    }
+
+
+    /* =====================================================
+       THEME
+    ====================================================== */
+
+    const themeToggle =
+        document.getElementById("themeToggle");
+
+    const savedTheme =
+        localStorage.getItem("satya-theme");
+
+    if (savedTheme === "light") {
+
+        document.body.classList.add(
+            "light-theme"
+        );
+
+        if (themeToggle) {
+            themeToggle.textContent = "☀";
+        }
+    }
+
+
+    if (themeToggle) {
+
+        themeToggle.addEventListener(
+            "click",
+            function() {
+
+                document.body.classList.toggle(
+                    "light-theme"
+                );
+
+                const isLight =
+                    document.body.classList.contains(
+                        "light-theme"
+                    );
+
+                localStorage.setItem(
+                    "satya-theme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+                themeToggle.textContent =
+                    isLight
+                        ? "☀"
+                        : "☾";
+            }
+        );
+    }
+
+
+    /* =====================================================
+       FORM LOADING STATE
+    ====================================================== */
+
+    const form =
+        document.getElementById(
+            "analyzerForm"
+        );
+
+    const analyzeButton =
+        document.getElementById(
+            "analyzeButton"
+        );
+
+
+    if (form && analyzeButton) {
+
+        form.addEventListener(
+            "submit",
+            function() {
+
+                analyzeButton.disabled = true;
+
+                analyzeButton.innerHTML =
+                    "<span>Analyzing...</span><span>⏳</span>";
+            }
+        );
+    }
+
+</script>
+
+</body>
+
+</html>

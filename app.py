@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-from pathlib import Path
 import re
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -9,11 +8,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 # SatyaCheck - MuRIL Fake News Detector
 # =========================================================
 
-BASE_DIR = Path(__file__).resolve().parent
+# Hugging Face model repository
+MODEL_NAME = "shivam123143/satyacheck-muril"
 
-MODEL_DIR = BASE_DIR / "model" / "muril_fake_news"
-
-MODEL_NAME = "MuRIL Fine-Tuned Fake News Classifier"
+# Human-readable model name
+MODEL_DISPLAY_NAME = "SatyaCheck MuRIL Fine-Tuned Classifier"
 
 MAX_LENGTH = 128
 DECISION_THRESHOLD = 0.60
@@ -25,33 +24,29 @@ model = None
 
 
 # =========================================================
-# Load MuRIL model
+# Load MuRIL model from Hugging Face
 # =========================================================
 
 def load_model():
     global tokenizer, model
 
-    if not MODEL_DIR.exists():
-        raise FileNotFoundError(
-            f"MuRIL model not found at: {MODEL_DIR}"
-        )
-
     print("=" * 60)
     print("Loading SatyaCheck MuRIL model...")
     print("=" * 60)
+    print(f"Model repository: {MODEL_NAME}")
 
     tokenizer = AutoTokenizer.from_pretrained(
-        str(MODEL_DIR)
+        MODEL_NAME
     )
 
     model = AutoModelForSequenceClassification.from_pretrained(
-        str(MODEL_DIR)
+        MODEL_NAME
     )
 
     model.eval()
 
     print("MuRIL model loaded successfully.")
-    print(f"Model path: {MODEL_DIR}")
+    print(f"Model repository: {MODEL_NAME}")
     print("=" * 60)
 
 
@@ -136,7 +131,10 @@ def detect_risk_signals(title, article):
     ]
 
     def contains_any(patterns):
-        return any(pattern in text for pattern in patterns)
+        return any(
+            pattern in text
+            for pattern in patterns
+        )
 
     if contains_any(free_patterns):
         signals.append("free/reward claim")
@@ -153,6 +151,7 @@ def detect_risk_signals(title, article):
     if contains_any(scam_patterns):
         signals.append("recharge/scam-related language")
 
+    # Detect URLs
     urls = re.findall(
         r"https?://\S+|www\.\S+",
         text,
@@ -230,7 +229,10 @@ def predict_news(title, article):
 
     risk_score = len(risk_signals)
 
+    # -----------------------------------------------------
     # Final classification
+    # -----------------------------------------------------
+
     if confidence < DECISION_THRESHOLD:
 
         label = "UNCERTAIN"
@@ -264,7 +266,8 @@ def predict_news(title, article):
         ),
         "risk_score": risk_score,
         "risk_signals": risk_signals,
-        "model": MODEL_NAME,
+        "model": MODEL_DISPLAY_NAME,
+        "model_repository": MODEL_NAME,
         "warning": (
             "This is an ML and risk-pattern assessment, "
             "not proof of truth. Verify important claims "
@@ -287,7 +290,7 @@ def home():
         article="",
         error=None,
         metrics={
-            "model": MODEL_NAME
+            "model": MODEL_DISPLAY_NAME
         }
     )
 
@@ -304,9 +307,10 @@ def analyze():
         ""
     ).strip()
 
+    # Support both "article" and "text"
     article = request.form.get(
-        "text",
-        ""
+        "article",
+        request.form.get("text", "")
     ).strip()
 
     result = None
@@ -329,12 +333,14 @@ def analyze():
     else:
 
         try:
+
             result = predict_news(
                 title,
                 article
             )
 
         except Exception as exc:
+
             error = f"Prediction error: {exc}"
 
     return render_template(
@@ -344,7 +350,7 @@ def analyze():
         article=article,
         error=error,
         metrics={
-            "model": MODEL_NAME
+            "model": MODEL_DISPLAY_NAME
         }
     )
 
@@ -364,20 +370,30 @@ def api_predict():
         data.get("title", "")
     ).strip()
 
+    # Support both "article" and "text"
     article = str(
-        data.get("text", "")
+        data.get(
+            "article",
+            data.get("text", "")
+        )
     ).strip()
 
     if len(title) < 5:
 
         return jsonify({
-            "error": "Title must contain at least 5 characters."
+            "error": (
+                "Title must contain "
+                "at least 5 characters."
+            )
         }), 400
 
     if len(article) < 30:
 
         return jsonify({
-            "error": "Text must contain at least 30 characters."
+            "error": (
+                "Text must contain "
+                "at least 30 characters."
+            )
         }), 400
 
     try:
@@ -410,7 +426,8 @@ def health():
         return jsonify({
             "status": "ok",
             "model_loaded": True,
-            "model": MODEL_NAME
+            "model": MODEL_DISPLAY_NAME,
+            "model_repository": MODEL_NAME
         })
 
     except Exception as exc:
@@ -423,15 +440,17 @@ def health():
 
 
 # =========================================================
-# Start
+# Start Flask
 # =========================================================
 
 if __name__ == "__main__":
 
     try:
+
         load_model()
 
     except Exception as exc:
+
         print("\nERROR loading model:")
         print(exc)
 
